@@ -8,13 +8,13 @@ case object Critical extends Severity
 case class ProbeStatus[F[_]](probe: Probe[F], result: ProbeResult)
 
 abstract class Probe[F[_]: Effect](
-                                                   val name: String,
-                                                   val severity: Severity
-                                                 ) {
-  def evaluate(): F[Either[ProbeFailure, ProbeSuccess]]
+    val name: String,
+    val severity: Severity
+) {
+  protected def evaluate(): F[Either[ProbeFailure, ProbeSuccess]]
 
-  final def status(): F[ProbeStatus[F]] = evaluate().map{
-    case Left(r) => ProbeStatus(this, r)
+  final def status(): F[ProbeStatus[F]] = evaluate().map {
+    case Left(r)  => ProbeStatus(this, r)
     case Right(r) => ProbeStatus(this, r)
   }
 }
@@ -22,4 +22,3 @@ abstract class Probe[F[_]: Effect](
 sealed trait ProbeResult
 final case class ProbeFailure(msg: String = "") extends ProbeResult
 final case class ProbeSuccess(msg: String = "") extends ProbeResult
-

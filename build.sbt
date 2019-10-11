@@ -3,7 +3,7 @@ version := "0.1"
 
 import Dependencies._
 
-lazy val `fs2-kafka-ops` = (project in file("."))
+lazy val probes = (project in file("."))
   .settings(
     organization := "com.github.lightsaway",
     startYear := Some(2019),
