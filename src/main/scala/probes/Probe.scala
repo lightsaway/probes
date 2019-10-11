@@ -19,6 +19,8 @@ abstract class Probe[F[_]: Effect](
   }
 }
 
-sealed trait ProbeResult
+sealed trait ProbeResult {
+  val msg: String
+}
 final case class ProbeFailure(msg: String = "") extends ProbeResult
 final case class ProbeSuccess(msg: String = "") extends ProbeResult
