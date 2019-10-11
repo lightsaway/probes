@@ -17,7 +17,7 @@ class TCPProbeTest extends FunSuite with Matchers {
 
   test("connection accepted") {
     val port = freePort_?()
-    val t = new Thread(new Server(port)).start()
+    new Thread(new Server(port)).start()
     val p = TCPProbe[IO](Location("0.0.0.0", port), "", Warning)
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeSuccess]
@@ -33,7 +33,7 @@ class TCPProbeTest extends FunSuite with Matchers {
 }
 
 class Server(port: Int) extends Runnable {
-  def run : Unit = {
+  def run: Unit = {
     val server = new ServerSocket(port)
     server.accept()
   }
