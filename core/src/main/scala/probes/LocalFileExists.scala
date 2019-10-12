@@ -5,9 +5,11 @@ import java.nio.file.{Files, Path}
 import cats.effect.Effect
 import cats.syntax.either._
 
-case class LocalFileExists[F[_]](path: Path, n: String, s: Severity)(
-    implicit F: Effect[F])
-    extends Probe[F](n, s) {
+case class LocalFileExists[F[_]](
+    path: Path,
+    override val name: String,
+    override val severity: Severity)(implicit F: Effect[F])
+    extends Probe[F](name, severity) {
   override def evaluate: F[Either[ProbeFailure, ProbeSuccess]] =
     if (Files.exists(path)) {
       F.pure(ProbeSuccess(s"file exists at ${path}").asRight)
