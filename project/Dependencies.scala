@@ -2,7 +2,8 @@ import sbt._
 
 object Dependencies {
 
-  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8"
+  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8" % Test
+  lazy val mockito = "org.mockito" %% "mockito-scala-scalatest" % "1.6.2" % Test
 
   object fs2 {
     private val version = "2.0.0"

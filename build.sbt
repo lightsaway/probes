@@ -29,7 +29,7 @@ lazy val core = (project in file("modules/core"))
       slf4j.log4jOver,
       logback.core % Test,
       logback.classic % Test,
-      scalaTest % Test
+      scalaTest
     ),
     scalafmtOnCompile := true,
   )
@@ -53,7 +53,7 @@ lazy val http4sProject = (project in file("modules/http4s-probes"))
     libraryDependencies ++= Seq(
       http4s.client,
       http4s.dsl,
-      scalaTest % Test,
+      scalaTest
     ),
     scalafmtOnCompile := true,
   )
@@ -75,7 +75,8 @@ lazy val kafkaProject = (project in file("modules/kafka-probes"))
     name := "probes-kafka",
     libraryDependencies ++= Seq(
       kafka.clients,
-      scalaTest % Test,
+      scalaTest,
+      mockito
     ),
     scalafmtOnCompile := true,
   )
