@@ -38,3 +38,14 @@ lazy val kafkaProject = (project in file("modules/kafka-probes"))
   ).settings(Settings.default: _*)
 
 
+lazy val pgProject = (project in file("modules/postgres-probes"))
+  .dependsOn(core)
+  .settings(
+    name := "probes-postgres",
+    libraryDependencies ++= Seq(
+      doobie.core,
+      doobie.postgres
+    ),
+  ).settings(Settings.default: _*)
+
+

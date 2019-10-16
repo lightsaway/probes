@@ -38,4 +38,10 @@ object Dependencies {
     val clients = "org.apache.kafka" % "kafka-clients"                     % version
   }
 
+  object doobie{
+    val version = "0.8.4"
+    val core = "org.tpolecat" %% "doobie-core"      %  version
+    val postgres = "org.tpolecat" %% "doobie-postgres"  %  version
+  }
+
 }
