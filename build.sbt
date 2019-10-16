@@ -10,7 +10,7 @@ lazy val root = project.in(file(".")).
     publishArtifact := false
   )
 
-lazy val core = (project in file("core"))
+lazy val core = (project in file("modules/core"))
   .settings(
     Publisher.publisher,
     scalacOptions ++= ScalacOptions.default ,
@@ -35,7 +35,7 @@ lazy val core = (project in file("core"))
   )
 
 
-lazy val http4s = (project in file("http4s-probes"))
+lazy val http4s = (project in file("modules/http4s-probes"))
   .dependsOn(core)
   .settings(
     Publisher.publisher,

@@ -18,7 +18,7 @@ class LocalFileExistsTest extends FunSuite with Matchers with EitherValues {
 
   test("file exists") {
     val p =
-      LocalFileExists[IO](Paths.get(".").toAbsolutePath, "filecheck", Warning)
+      LocalFileExists[IO](new File("build.sbt").toPath, "filecheck", Warning)
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeSuccess]
     r.probe shouldBe p
