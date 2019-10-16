@@ -4,7 +4,7 @@ version := "0.1"
 import Dependencies._
 
 lazy val root = project.in(file(".")).
-  aggregate(core, http4s).
+  aggregate(core, http4sProject).
   settings(
     name := "probes",
     publishArtifact := false
@@ -35,11 +35,12 @@ lazy val core = (project in file("modules/core"))
   )
 
 
-lazy val http4s = (project in file("modules/http4s-probes"))
+lazy val http4sProject = (project in file("modules/http4s-probes"))
   .dependsOn(core)
   .settings(
     Publisher.publisher,
     scalacOptions ++= ScalacOptions.default ,
+    resolvers += Resolver.sonatypeRepo("snapshots"),
     inThisBuild(
       List(
         scalaVersion := "2.13.1",
@@ -50,7 +51,9 @@ lazy val http4s = (project in file("modules/http4s-probes"))
       )),
     name := "probes-http4s",
     libraryDependencies ++= Seq(
-      scalaTest % Test
+      http4s.client,
+      http4s.dsl,
+      scalaTest % Test,
     ),
     scalafmtOnCompile := true,
   )

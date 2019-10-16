@@ -25,4 +25,11 @@ object Dependencies {
     val classic = "ch.qos.logback" % "logback-classic" % version
   }
 
+  object http4s {
+    private val version = "0.21.0-SNAPSHOT"
+    val dsl = "org.http4s" %% "http4s-dsl" % version
+    val server = "org.http4s" %% "http4s-blaze-server" % version
+    val client = "org.http4s" %% "http4s-blaze-client" % version
+  }
+
 }

@@ -24,3 +24,10 @@ sealed trait ProbeResult {
 }
 final case class ProbeFailure(msg: String = "") extends ProbeResult
 final case class ProbeSuccess(msg: String = "") extends ProbeResult
+
+object errorHandler {
+  def defaultErrorHandler[F[_]](implicit F: Effect[F])
+    : PartialFunction[Throwable, F[Either[ProbeFailure, ProbeSuccess]]] = {
+    case e => F.pure(ProbeFailure(e.toString).asLeft[ProbeSuccess])
+  }
+}
