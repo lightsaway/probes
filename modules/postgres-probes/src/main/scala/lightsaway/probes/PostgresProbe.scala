@@ -1,13 +1,14 @@
+package lightsaway.probes
+
 import cats.effect.{Blocker, ContextShift, Effect}
 import doobie.free.connection.ConnectionIO
 import doobie.util.transactor.Transactor
-import lightsaway.probes.{Probe, ProbeFailure, ProbeSuccess, Severity}
 import doobie.implicits._
 import cats.syntax.applicativeError._
 import cats.syntax.functor._
 import cats.syntax.either._
 
-class DatabaseHealthCheck[F[_]: Effect](name: String, severity: Severity)(
+case class PostgresConnectionProbe[F[_]: Effect](override val name: String, override val severity: Severity)(
   implicit blocker: Blocker, tx: Transactor[F], cs: ContextShift[F]
 ) extends Probe[F](
   name, severity
