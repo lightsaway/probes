@@ -1,7 +1,9 @@
+package lightsaway.probes
+
 import cats.effect.Effect
-import org.apache.kafka.clients.producer.KafkaProducer
-import probes.{Probe, ProbeFailure, ProbeSuccess, Severity, Warning}
 import cats.syntax.either._
+import org.apache.kafka.clients.producer.KafkaProducer
+
 import scala.jdk.CollectionConverters._
 
 class KafkaProducerTopicProbe[F[_]](topic: String,

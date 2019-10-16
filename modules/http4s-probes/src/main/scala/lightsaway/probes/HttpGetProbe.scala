@@ -1,10 +1,11 @@
+package lightsaway.probes
+
 import cats.effect.Effect
-import org.http4s.{Request, Status, Uri}
+import org.http4s.Method.GET
 import org.http4s.client.Client
-import probes._
-import org.http4s.Method._
-import cats.syntax.either._
+import org.http4s.{Request, Status, Uri}
 import cats.syntax.applicativeError._
+import cats.syntax.either._
 
 case class HttpGetProbe[F[_]](
     uri: Uri,

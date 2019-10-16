@@ -1,4 +1,4 @@
-package probes
+package lightsaway.probes
 
 import cats.{Applicative, Monad, Parallel}
 import cats.effect.concurrent.Ref
@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 import cats.Parallel.parSequence
 import cats.effect.Sync
 import fs2.Stream
-import probes.ProbeStore.ProbeStore
+import lightsaway.probes.ProbeStore.ProbeStore
 
 object ProbesStream {
   def apply[F[_]: Parallel](
@@ -22,8 +22,7 @@ object ProbesSink {
   def apply[F[_]: Applicative](
       store: ProbeStore[F]
   ): List[ProbeStatus[F]] => F[Unit] =
-    _.traverse_(status =>
-      store.modify(c => ((c + (status.probe -> status), c))))
+    _.traverse_(status => store.modify(c => (c + (status.probe -> status), c)))
 }
 
 object ProbeStore {

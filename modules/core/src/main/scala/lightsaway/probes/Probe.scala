@@ -1,4 +1,4 @@
-package probes
+package lightsaway.probes
 import cats.effect.Effect
 import cats.implicits._
 sealed trait Severity

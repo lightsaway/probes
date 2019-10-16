@@ -1,4 +1,4 @@
-package probes
+package lightsaway.probes
 
 import java.nio.file.{Files, Path}
 

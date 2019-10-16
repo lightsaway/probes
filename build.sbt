@@ -1,4 +1,4 @@
-name := "probes"
+name := "lightsaway.lightsaway.probes"
 version := "0.1"
 
 import Dependencies._
@@ -6,7 +6,7 @@ import Dependencies._
 lazy val root = project.in(file(".")).
   aggregate(core, http4sProject, kafkaProject).
   settings(
-    name := "probes",
+    name := "lightsaway.probes",
     publishArtifact := false
   )
 

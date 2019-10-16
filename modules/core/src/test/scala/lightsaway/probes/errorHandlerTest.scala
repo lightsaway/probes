@@ -1,4 +1,4 @@
-package probes
+package lightsaway.probes
 
 import cats.effect.IO
 import org.scalatest.{FunSuite, Matchers}

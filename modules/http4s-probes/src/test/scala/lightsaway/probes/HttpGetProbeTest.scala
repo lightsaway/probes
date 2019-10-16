@@ -1,10 +1,13 @@
-import cats.effect.IO
-import org.http4s.client.JavaNetClientBuilder
-import org.scalatest.{FunSuite, Matchers}
-import probes.{ProbeFailure, ProbeSuccess, Warning}
-import org.http4s.implicits._
-import cats.effect.Blocker
+package lightsaway.probes
+
 import java.util.concurrent._
+
+import cats.effect.{Blocker, IO}
+import lightsaway.probes
+import lightsaway.probes.{HttpGetProbe, ProbeFailure, ProbeSuccess, Warning}
+import org.http4s.client.JavaNetClientBuilder
+import org.http4s.implicits._
+import org.scalatest.{FunSuite, Matchers}
 
 class HttpGetProbeTest extends FunSuite with Matchers {
   implicit val contextShift =
@@ -25,7 +28,8 @@ class HttpGetProbeTest extends FunSuite with Matchers {
 
   test("http probe is negative") {
     val p =
-      HttpGetProbe[IO](uri"http://somerandomwebsite.eu", "failing", Warning)
+      probes
+        .HttpGetProbe[IO](uri"http://somerandomwebsite.eu", "failing", Warning)
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeFailure]
     r.result.msg.toLowerCase should include("unknownhost")

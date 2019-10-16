@@ -1,11 +1,13 @@
+package lightsaway.probes
+
 import cats.effect.IO
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.{Metric, MetricName}
-import org.scalatest.{FunSuite, Matchers}
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
-import probes.{ProbeFailure, ProbeSuccess}
-import scala.jdk.CollectionConverters._
+import org.scalatest.{FunSuite, Matchers}
+
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 class KafkaConsumerProbeTest
     extends FunSuite

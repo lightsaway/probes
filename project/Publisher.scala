@@ -5,7 +5,7 @@ object Publisher {
   val publisher = List(
     organization := "com.github.lightsaway",
     startYear := Some(2019),
-    homepage := Some(url("https://github.com/lightsaway/probes")),
+    homepage := Some(url("https://github.com/lightsaway/lightsaway.lightsaway.probes")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(

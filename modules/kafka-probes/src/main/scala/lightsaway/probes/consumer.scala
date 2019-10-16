@@ -1,7 +1,8 @@
+package lightsaway.probes
+
 import cats.effect.Effect
-import org.apache.kafka.clients.consumer.KafkaConsumer
 import cats.syntax.either._
-import probes._
+import org.apache.kafka.clients.consumer.KafkaConsumer
 
 import scala.jdk.CollectionConverters._
 
