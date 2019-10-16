@@ -6,8 +6,8 @@ import org.apache.kafka.clients.producer.KafkaProducer
 
 import scala.jdk.CollectionConverters._
 
-class KafkaProducerTopicProbe[F[_]](topic: String,
-                                    producer: KafkaProducer[_, _])(
+case class KafkaProducerTopicProbe[F[_]](topic: String,
+                                         producer: KafkaProducer[_, _])(
     name: String = s"kafka-producer-topic",
     severity: Severity = Warning)(implicit F: Effect[F])
     extends Probe[F](
@@ -26,7 +26,8 @@ class KafkaProducerTopicProbe[F[_]](topic: String,
     })
 }
 
-class ProducerErrorRateProbe[F[_]](topic: String, producer: KafkaProducer[_, _])(
+case class ProducerErrorRateProbe[F[_]](topic: String,
+                                        producer: KafkaProducer[_, _])(
     name: String = s"kafka-producer",
     severity: Severity = Warning)(implicit F: Effect[F])
     extends Probe[F](

@@ -7,7 +7,7 @@ import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.ExecutionContext
-import scala.jdk.CollectionConverters._
+import utils._
 
 class KafkaConsumerProbeTest
     extends FunSuite
@@ -56,13 +56,7 @@ class KafkaConsumerProbeTest
 
   }
 
-  def getMetric(number: Double): Metric = new Metric {
-    override def metricName(): MetricName =
-      new MetricName("connection-count",
-                     "",
-                     "",
-                     Map.empty[String, String].asJava)
-    override def value(): Double = 0.0
-    override def metricValue(): Double = number
-  }
+
 }
+
+
