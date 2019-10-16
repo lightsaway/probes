@@ -1,6 +1,6 @@
 language: scala
 jdk:
-  - oraclejdk10
+  - openjdk10
 
 stages:
   - name: test
