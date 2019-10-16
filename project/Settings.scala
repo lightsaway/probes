@@ -1,4 +1,4 @@
-import Dependencies.{kafka, mockito, scalaTest}
+import Dependencies.{wiremock, mockito, scalaTest}
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
 import sbt.Keys.{javacOptions, libraryDependencies, parallelExecution, resolvers, scalaVersion, scalacOptions}
 import sbt.{Def, Resolver, inThisBuild}
@@ -16,7 +16,8 @@ object Settings {
       )),
     libraryDependencies ++= Seq(
       scalaTest,
-      mockito
+      mockito,
+      wiremock
     ),
     scalafmtOnCompile := true
   )
