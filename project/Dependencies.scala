@@ -32,4 +32,9 @@ object Dependencies {
     val client = "org.http4s" %% "http4s-blaze-client" % version
   }
 
+  object kafka {
+    private val version = "2.3.0"
+    val clients = "org.apache.kafka" % "kafka-clients"                     % version
+  }
+
 }
