@@ -3,7 +3,7 @@ import cats.effect.IO
 import com.github.tomakehurst.wiremock.WireMockServer
 import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 
-class TCPProbeTest extends FunSuite with Matchers with BeforeAndAfterEach{
+class TCPProbeTest extends FunSuite with Matchers with BeforeAndAfterEach {
   private val port = 8080
   private val wireMockServer = new WireMockServer(8080)
 
@@ -30,4 +30,3 @@ class TCPProbeTest extends FunSuite with Matchers with BeforeAndAfterEach{
     r.probe shouldBe p
   }
 }
-

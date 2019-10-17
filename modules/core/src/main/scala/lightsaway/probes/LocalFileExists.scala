@@ -10,10 +10,10 @@ case class LocalFileExists[F[_]](
     override val name: String,
     override val severity: Severity)(implicit F: Effect[F])
     extends Probe[F](name, severity) {
-  override def evaluate: F[Either[ProbeFailure, ProbeSuccess]] =
+  override def evaluate: F[ProbeResult] =
     if (Files.exists(path) && !Files.isDirectory(path)) {
-      F.pure(ProbeSuccess(s"file exists at ${path}").asRight)
+      F.pure(ProbeSuccess(s"file exists at ${path}"))
     } else {
-      F.pure(ProbeFailure(s"file is missing at ${path}").asLeft)
+      F.pure(ProbeFailure(s"file is missing at ${path}"))
     }
 }

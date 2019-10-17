@@ -12,15 +12,14 @@ case class HttpGetProbe[F[_]](
     override val name: String,
     override val severity: Severity)(implicit F: Effect[F], client: Client[F])
     extends Probe[F](name, severity) {
-  override protected def evaluate(): F[Either[ProbeFailure, ProbeSuccess]] = {
-    val r: F[Either[ProbeFailure, ProbeSuccess]] =
+  override def evaluate(): F[ProbeResult] = {
+    val r: F[ProbeResult] =
       client.fetch(Request[F](GET, uri)) {
         case Status.Successful(r) =>
-          F.pure(
-            ProbeSuccess(s"Request succeded with status ${r.status.code}").asRight)
+          F.pure(ProbeSuccess(s"Request succeded with status ${r.status.code}"))
         case r =>
           F.pure(
-            ProbeFailure(s"Request $r failed with status ${r.status.code}").asLeft)
+            ProbeFailure(s"Request $r failed with status ${r.status.code}"))
       }
     r.handleErrorWith(errorHandler.defaultErrorHandler[F])
   }

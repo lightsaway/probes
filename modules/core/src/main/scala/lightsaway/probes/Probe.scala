@@ -11,12 +11,8 @@ abstract class Probe[F[_]: Effect](
     val name: String,
     val severity: Severity
 ) {
-  protected def evaluate(): F[Either[ProbeFailure, ProbeSuccess]]
-
-  final def status(): F[ProbeStatus[F]] = evaluate().map {
-    case Left(r)  => ProbeStatus(this, r)
-    case Right(r) => ProbeStatus(this, r)
-  }
+  def evaluate(): F[ProbeResult]
+  final def status(): F[ProbeStatus[F]] = evaluate().map(ProbeStatus(this, _))
 }
 
 sealed trait ProbeResult {
@@ -26,8 +22,8 @@ final case class ProbeFailure(msg: String = "") extends ProbeResult
 final case class ProbeSuccess(msg: String = "") extends ProbeResult
 
 object errorHandler {
-  def defaultErrorHandler[F[_]](implicit F: Effect[F])
-    : PartialFunction[Throwable, F[Either[ProbeFailure, ProbeSuccess]]] = {
-    case e => F.pure(ProbeFailure(e.toString).asLeft[ProbeSuccess])
+  def defaultErrorHandler[F[_]](
+      implicit F: Effect[F]): PartialFunction[Throwable, F[ProbeResult]] = {
+    case e => F.pure(ProbeFailure(e.toString): ProbeResult)
   }
 }

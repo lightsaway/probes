@@ -15,9 +15,9 @@ case class PostgresConnectionProbe[F[_]: Effect](override val name: String, over
 ) {
   private val select: ConnectionIO[Int] = sql"SELECT 1".query[Int].unique
 
-  override def evaluate(): F[Either[ProbeFailure, ProbeSuccess]] = blocker.blockOn(
+  override def evaluate(): F[ProbeResult] = blocker.blockOn(
     select.transact(tx).attempt.map {
-      case Right(_) => ProbeSuccess("DB Connection established").asRight
-      case Left(e) => ProbeFailure(s"Unable to connect to the db : ${e.getMessage}").asLeft
+      case Right(_) => ProbeSuccess("DB Connection established")
+      case Left(e) => ProbeFailure(s"Unable to connect to the db : ${e.getMessage}")
     })
 }

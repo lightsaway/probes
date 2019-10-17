@@ -15,15 +15,15 @@ case class KafkaProducerTopicProbe[F[_]](topic: String,
       severity
     ) {
 
-  override def evaluate(): F[Either[ProbeFailure, ProbeSuccess]] =
-    F.delay({
+  override def evaluate(): F[ProbeResult] =
+    F.delay {
       val p = producer.partitionsFor(topic).asScala
-      if (p.nonEmpty) ProbeSuccess(s"found ${p.size} partitions").asRight
+      if (p.nonEmpty) ProbeSuccess(s"found ${p.size} partitions")
       else
         ProbeFailure(
           s"Couldn't find any partition for topic ${topic}"
-        ).asLeft
-    })
+        )
+    }
 }
 
 case class ProducerErrorRateProbe[F[_]](topic: String,
@@ -35,19 +35,18 @@ case class ProducerErrorRateProbe[F[_]](topic: String,
       severity
     ) {
   private final val ERROR_RATE = "record-error-rate"
-  override def evaluate(): F[Either[ProbeFailure, ProbeSuccess]] = F.delay {
-    for {
+  override def evaluate(): F[ProbeResult] = F.delay {
+    (for {
       errorRate <- producer
         .metrics()
         .asScala
         .values
         .find(_.metricName().name() == ERROR_RATE)
-        .toRight(ProbeFailure(s"metric $ERROR_RATE not available"))
       // metricValue returns Object - yaak
       rate = errorRate.metricValue().asInstanceOf[Double]
-      status <- if (rate == 0.0) ProbeSuccess("error rate is 0").asRight
-      else ProbeFailure(s"kafka error rate($errorRate) > 0").asLeft
-    } yield status
+      status = if (rate == 0.0) ProbeSuccess("error rate is 0")
+      else ProbeFailure(s"kafka error rate($errorRate) > 0")
+    } yield status).getOrElse(ProbeFailure(s"metric $ERROR_RATE not available"))
 
   }
 }

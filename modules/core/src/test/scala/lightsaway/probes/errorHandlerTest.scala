@@ -10,8 +10,6 @@ class errorHandlerTest extends FunSuite with Matchers {
       .raiseError(new Throwable("baad day"))
       .handleErrorWith(errorHandler.defaultErrorHandler[IO])
       .unsafeRunSync()
-      .swap
-      .getOrElse(fail())
     e shouldBe a[ProbeFailure]
     e.msg shouldBe "java.lang.Throwable: baad day"
   }

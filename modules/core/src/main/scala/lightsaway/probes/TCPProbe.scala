@@ -1,7 +1,6 @@
 package lightsaway.probes
 
-import java.lang.System.currentTimeMillis
-
+import lightsaway.probes.errorHandler.defaultErrorHandler
 import cats.implicits._
 import java.net.InetSocketAddress
 import java.nio.channels.SocketChannel
@@ -13,22 +12,20 @@ case class Location(ip: String, port: Int)
 case class TCPProbe[F[_]](location: Location, n: String, s: Severity)(
     implicit F: Effect[F])
     extends Probe[F](n, s) {
-  override def evaluate: F[Either[ProbeFailure, ProbeSuccess]] =
+  override def evaluate: F[ProbeResult] =
     F.bracket(
-      F.delay {
-        SocketChannel.open(new InetSocketAddress(location.ip, location.port))
-      }.attempt
-    ) {
-      case Left(e) => F.pure(ProbeFailure(e.getMessage).asLeft[ProbeSuccess])
-      case Right(r) =>
-        if (r.isConnected) {
-          F.pure(ProbeSuccess().asRight[ProbeFailure])
-        } else {
-          F.pure(ProbeFailure().asLeft[ProbeSuccess])
+        F.delay {
+          SocketChannel.open(new InetSocketAddress(location.ip, location.port))
         }
-    } {
-      case Left(_)  => F.unit
-      case Right(r) => F.delay(r.close()).as(())
-    }
+      ) { socket =>
+        if (socket.isConnected) {
+          F.pure(ProbeSuccess(): ProbeResult)
+        } else {
+          F.pure(ProbeFailure(): ProbeResult)
+        }
+      } { socket =>
+        F.delay(socket.close()).as(())
+      }
+      .handleErrorWith(defaultErrorHandler[F])
 
 }
