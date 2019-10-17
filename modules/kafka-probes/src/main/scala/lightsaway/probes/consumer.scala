@@ -5,13 +5,9 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 
 import scala.jdk.CollectionConverters._
 
-case class KafkaConsumerHealthCheck[F[_]](consumer: KafkaConsumer[_, _])(
-    name: String = s"kafka-consumer",
-    severity: Severity = Warning)(implicit F: Effect[F])
-    extends Probe[F](
-      name,
-      severity
-    ) {
+case class KafkaConsumerHealthCheck[F[_]]()(implicit F: Effect[F],
+                                            consumer: KafkaConsumer[_, _])
+    extends Probe[F] {
   private val CONNECTION_COUNT = "connection-count"
 
   override def evaluate(): F[ProbeResult] = F.delay {

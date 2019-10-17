@@ -1,6 +1,6 @@
 package lightsaway.probes
 
-import lightsaway.probes.errorHandler.defaultErrorHandler
+import lightsaway.probes.errorHandler.errorToFailure
 import cats.implicits._
 import java.net.InetSocketAddress
 import java.nio.channels.SocketChannel
@@ -9,9 +9,8 @@ import cats.effect.{Effect, IO}
 case class Location(ip: String, port: Int)
 
 //TODO make fs2.Stream to repeat untill timeout or success
-case class TCPProbe[F[_]](location: Location, n: String, s: Severity)(
-    implicit F: Effect[F])
-    extends Probe[F](n, s) {
+case class TCPProbe[F[_]](location: Location)(implicit F: Effect[F])
+    extends Probe[F] {
   override def evaluate: F[ProbeResult] =
     F.bracket(
         F.delay {
@@ -26,6 +25,6 @@ case class TCPProbe[F[_]](location: Location, n: String, s: Severity)(
       } { socket =>
         F.delay(socket.close()).as(())
       }
-      .handleErrorWith(defaultErrorHandler[F])
+      .handleErrorWith(errorToFailure[F])
 
 }

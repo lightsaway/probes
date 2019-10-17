@@ -23,18 +23,18 @@ class KafkaConsumerProbeTest
   }
 
   test("no metrics returns failure, metric connection-count not available") {
-    val metrics = new java.util.HashMap[MetricName, Metric]()
-    val kafkaConsumerMock = mock[KafkaConsumer[String, String]]
-
-    val healthCheck = KafkaConsumerHealthCheck[IO](kafkaConsumerMock)()
-    when(kafkaConsumerMock.metrics.asInstanceOf[MetricsMap]).thenReturn(metrics)
+    val f = new Fixture
+    implicit val k = f.kafkaConsumerMock
+    val healthCheck = KafkaConsumerHealthCheck[IO]()
+    when(k.metrics.asInstanceOf[MetricsMap]).thenReturn(f.metrics)
     val result = healthCheck.status().unsafeRunSync.result
     result shouldBe ProbeFailure(s"metric connection-count not available")
   }
 
   test("available metric with 0 connections returns failure, couldn't connect") {
     val f = new Fixture
-    val probe = KafkaConsumerHealthCheck[IO](f.kafkaConsumerMock)()
+    implicit val k = f.kafkaConsumerMock
+    val probe = KafkaConsumerHealthCheck[IO]()
     val metric = getMetric(0.0)
     f.metrics.put(metric.metricName(), metric)
     when(f.kafkaConsumerMock.metrics.asInstanceOf[MetricsMap])
@@ -46,7 +46,8 @@ class KafkaConsumerProbeTest
 
   test("available metric with 1 connections returns success") {
     val f = new Fixture
-    val healthCheck = KafkaConsumerHealthCheck[IO](f.kafkaConsumerMock)()
+    implicit val k = f.kafkaConsumerMock
+    val healthCheck = KafkaConsumerHealthCheck[IO]()
     val metric = getMetric(1.0)
     f.metrics.put(metric.metricName(), metric)
     when(f.kafkaConsumerMock.metrics.asInstanceOf[MetricsMap])

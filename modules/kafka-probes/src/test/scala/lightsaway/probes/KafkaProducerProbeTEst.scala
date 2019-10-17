@@ -24,7 +24,9 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
   test(
     "no metrics returns probeFailure, metric record-error-rate not available") {
     val f = new Fixture
-    val probe = ProducerErrorRateProbe[IO]("", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = ProducerErrorRateProbe[IO]()
+
     when(f.kafkaProducerMock.metrics.asInstanceOf[MetricsMap])
       .thenReturn(f.metrics)
 
@@ -35,8 +37,8 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
   test(
     "wrong metrics returns probeFailure, metric record-error-rate not available") {
     val f = new Fixture
-
-    val probe = ProducerErrorRateProbe[IO]("", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = ProducerErrorRateProbe[IO]()
     when(f.kafkaProducerMock.metrics.asInstanceOf[MetricsMap])
       .thenReturn(f.metrics)
 
@@ -46,7 +48,8 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
 
   test("no partitions returns probeFailure") {
     val f = new Fixture
-    val probe = KafkaProducerTopicProbe[IO]("topic", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = KafkaProducerTopicProbe[IO]("topic")
 
     when(f.kafkaProducerMock.partitionsFor("topic"))
       .thenReturn(List[PartitionInfo]().asJava)
@@ -57,8 +60,8 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
 
   test("one partitions returns healthy") {
     val f = new Fixture
-
-    val probe = KafkaProducerTopicProbe[IO]("topic", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = KafkaProducerTopicProbe[IO]("topic")
     val node = new Node(0, "", 0)
 
     when(f.kafkaProducerMock.partitionsFor("topic"))
@@ -76,8 +79,8 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
 
   test("available metric with error rate > 0 returns probeFailure, ") {
     val f = new Fixture
-
-    val probe = ProducerErrorRateProbe[IO]("topic", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = ProducerErrorRateProbe[IO]()
     val metric = getMetric(1.0, ERROR_RATE)
     f.metrics.put(metric.metricName(), metric)
 
@@ -91,8 +94,8 @@ class KafkaProducerProbeTest extends FunSuite with Matchers with MockitoSugar {
 
   test("available metric with error rate == 0 returns empty Right") {
     val f = new Fixture
-
-    val probe = ProducerErrorRateProbe[IO]("topic", f.kafkaProducerMock)()
+    implicit val k = f.kafkaProducerMock
+    val probe = ProducerErrorRateProbe[IO]()
     val metric = getMetric(0.0, ERROR_RATE)
     f.metrics.put(metric.metricName(), metric)
 

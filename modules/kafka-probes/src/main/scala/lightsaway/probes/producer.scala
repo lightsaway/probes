@@ -6,15 +6,10 @@ import org.apache.kafka.clients.producer.KafkaProducer
 
 import scala.jdk.CollectionConverters._
 
-case class KafkaProducerTopicProbe[F[_]](topic: String,
-                                         producer: KafkaProducer[_, _])(
-    name: String = s"kafka-producer-topic",
-    severity: Severity = Warning)(implicit F: Effect[F])
-    extends Probe[F](
-      name,
-      severity
-    ) {
-
+case class KafkaProducerTopicProbe[F[_]](topic: String)(
+    implicit F: Effect[F],
+    producer: KafkaProducer[_, _])
+    extends Probe[F] {
   override def evaluate(): F[ProbeResult] =
     F.delay {
       val p = producer.partitionsFor(topic).asScala
@@ -26,14 +21,9 @@ case class KafkaProducerTopicProbe[F[_]](topic: String,
     }
 }
 
-case class ProducerErrorRateProbe[F[_]](topic: String,
-                                        producer: KafkaProducer[_, _])(
-    name: String = s"kafka-producer",
-    severity: Severity = Warning)(implicit F: Effect[F])
-    extends Probe[F](
-      name,
-      severity
-    ) {
+case class ProducerErrorRateProbe[F[_]]()(implicit F: Effect[F],
+                                          producer: KafkaProducer[_, _])
+    extends Probe[F] {
   private final val ERROR_RATE = "record-error-rate"
   override def evaluate(): F[ProbeResult] = F.delay {
     (for {

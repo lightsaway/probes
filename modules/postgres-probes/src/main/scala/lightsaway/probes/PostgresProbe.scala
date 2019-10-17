@@ -8,11 +8,9 @@ import cats.syntax.applicativeError._
 import cats.syntax.functor._
 import cats.syntax.either._
 
-case class PostgresConnectionProbe[F[_]: Effect](override val name: String, override val severity: Severity)(
+case class PostgresConnectionProbe[F[_]: Effect]()(
   implicit blocker: Blocker, tx: Transactor[F], cs: ContextShift[F]
-) extends Probe[F](
-  name, severity
-) {
+) extends Probe[F] {
   private val select: ConnectionIO[Int] = sql"SELECT 1".query[Int].unique
 
   override def evaluate(): F[ProbeResult] = blocker.blockOn(

@@ -12,19 +12,16 @@ class ProbesStreamTest extends FunSuite with Matchers {
 
   test("creates stream") {
 
-    val probes = List.fill(3)(
-      LocalFileExists[IO](new File("/not/a/path").toPath, "filecheck", Warning))
+    val probes =
+      List.fill(3)(LocalFileExists[IO](new File("/not/a/path").toPath))
     val res = ProbesStream[IO](probes).compile.toList.unsafeRunSync().flatten
     res.size shouldBe 3
     every(res.map(_.result)) shouldBe a[ProbeFailure]
   }
 
   test("runs through pipe") {
-    val probes = (1 to 3).toList.map(
-      i =>
-        LocalFileExists[IO](new File("/not/a/path").toPath,
-                            s"${i}_filecheck",
-                            Warning))
+    val probes = (1 to 3).toList.map(i =>
+      LocalFileExists[IO](new File("/not/a/path").toPath))
     val store = ProbeStore[IO]().unsafeRunSync()
     val res = ProbesStream[IO](probes)
       .evalTap(ProbesSink[IO](store))

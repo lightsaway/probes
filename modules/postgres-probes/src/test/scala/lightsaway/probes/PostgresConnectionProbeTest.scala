@@ -18,9 +18,8 @@ class PostgresConnectionProbeTest extends FunSuite with Matchers {
   implicit val blocker = Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
 
   test("no connection"){
-    val probe = PostgresConnectionProbe[IO]("",Warning).status().unsafeRunSync()
+    val probe = PostgresConnectionProbe[IO]().status().unsafeRunSync()
     probe.result shouldBe a[ProbeFailure]
     probe.result.msg should include("Unable to connect to the db ")
   }
-
 }

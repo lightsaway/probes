@@ -16,7 +16,7 @@ class TCPProbeTest extends FunSuite with Matchers with BeforeAndAfterEach {
   }
 
   test("connection refused") {
-    val p = TCPProbe[IO](Location("0.0.0.0", 5000), "", Warning)
+    val p = TCPProbe[IO](Location("0.0.0.0", 5000))
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeFailure]
     r.result.msg should include("refused")
@@ -24,7 +24,7 @@ class TCPProbeTest extends FunSuite with Matchers with BeforeAndAfterEach {
   }
 
   test("connection accepted") {
-    val p = TCPProbe[IO](Location("0.0.0.0", 8080), "", Warning)
+    val p = TCPProbe[IO](Location("0.0.0.0", 8080))
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeSuccess]
     r.probe shouldBe p

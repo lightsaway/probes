@@ -19,7 +19,7 @@ class HttpGetProbeTest extends FunSuite with Matchers {
 
   test("http probe is positive") {
     //fixme : start mock server
-    val p = HttpGetProbe[IO](uri"https://www.yahoo.com/", "yahoo", Warning)
+    val p = HttpGetProbe[IO](uri"https://www.yahoo.com/")
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeSuccess]
     r.result.msg should include("status 200")
@@ -29,7 +29,7 @@ class HttpGetProbeTest extends FunSuite with Matchers {
   test("http probe is negative") {
     val p =
       probes
-        .HttpGetProbe[IO](uri"http://somerandomwebsite.eu", "failing", Warning)
+        .HttpGetProbe[IO](uri"http://somerandomwebsite.eu")
     val r = p.status().unsafeRunSync()
     r.result shouldBe a[ProbeFailure]
     r.result.msg.toLowerCase should include("unknownhost")
